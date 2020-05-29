@@ -74,10 +74,12 @@ function Recordings(props) {
                 </IconButton>
             </ListItemSecondaryAction>
         </ListItem>
+        
     );
     return (
         <List>
             {recordingList}
+            <Button variant="contained" color="primary">New Recording</Button>
         </List>
     )
 }
