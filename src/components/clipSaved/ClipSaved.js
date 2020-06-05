@@ -11,23 +11,11 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
-  },
-  formControl: {
-    margin: theme.spacing(8),
-    minWidth: 200
-  },
-  buttonGroup: {
-    margin: theme.spacing(2)
   }
 }));
 
 export default function SavedClip() {
   const classes = useStyles();
-  const [song, setSong] = React.useState("");
-
-  const handleChange = event => {
-    setSong(event.target.value);
-  };
 
   return (
     <Container>
