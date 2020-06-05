@@ -108,6 +108,7 @@ class RecordSong extends React.Component {
             <CssBaseline />
             
             <Grid container justify="center">
+            
               <Grid item sm={6}>
               <Typography variant="h3">Choose Role</Typography>
               <FormControl>

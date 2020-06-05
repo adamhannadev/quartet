@@ -17,6 +17,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import ChooseSong from "./components/chooseSong/ChooseSong";
 import UploadMidi from "./components/uploadMidi/UploadMidi";
 import RecordSong from "./components/recordSong/RecordSong";
+import ClipSaved from "./components/clipSaved/ClipSaved";
 import ChooseMixSong from "./components/chooseMixSong/ChooseMixSong";
 import ChooseMixParts from "./components/chooseMixParts/ChooseMixParts";
 import MixReady from "./components/mixReady/MixReady";
@@ -73,6 +74,12 @@ function App({ currentUser, checkUserSession }) {
               }
             />
             <Route path="/record-song" render={() => <RecordSong />} />
+            <Route
+              path="/clip-saved"
+              render={() =>
+                currentUser ? <ClipSaved /> : <Redirect to="/" />
+              }
+            />
             <Route
               path="/choose-mix-song"
               render={() =>
