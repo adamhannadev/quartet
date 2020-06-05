@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const ffmpeg = require('ffmpeg');
+const { exec } = require("child_process");
 // var appRoot = require('app-root-path');
 
 var indexRouter = require('./routes/index');
@@ -43,10 +45,6 @@ app.get('/midi-files', function (req, res) {
         title: "Uibhist Mo Graidh",
         route: "/midi/uibhist_mo_ghraidh.mp3"
       }, {
-        id: "suas_leis",
-        title: "Suas Leis A' Ghaidhlig",
-        route: "/midi/suas_leis.mp3"
-      }, {
         id: "chi_mi_na_morbhenna",
         title: "Chi Mi Na Morbhenna",
         route: "/midi/chi_mi_na_morbhenna.mp3"
@@ -65,17 +63,35 @@ app.post('/upload', async (req, res) => {
     } else {
       //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
       let recording = req.files.recording;
+      recording.mv(`./public/recordings/${req.body.songID}/${req.body.partID}/${req.body.uid}-${req.body.songID}-${req.body.partID}.wav`);
+      const mixCmd = exec(`
+      set - e &&
+      cd ./public/recordings/${req.body.songID}/${req.body.partID} &&
+      pwd && ls -a &&
+      sox "|opusdec --force-wav ${req.body.uid}-${req.body.songID}-${req.body.partID}.wav -" ${req.body.uid}-${req.body.songID}-${req.body.partID}.mp3 &&
+      echo File has been transcoded.
+      `, (error, stdout, stderr) => {
+        if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+        }
+        if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+      });
+      mixCmd.on('exit', function (code) {
+        console.log('Child process exited with exit code ' + code);
+      });
 
-      //Use the mv() method to place the file in upload directory (i.e. "uploads")
-      recording.mv(`./public/recordings/${req.body.songID}/${req.body.partID}/${req.body.uid}-${req.body.songID}-${req.body.partID}.mp3`);
+      // sox /public/recordings/${req.body.songID}/${req.body.partID}/${req.body.uid}-${req.body.songID}-${req.body.partID}.wav ./public/recordings/${req.body.songID}/${req.body.partID}/${req.body.uid}-${req.body.songID}-${req.body.partID}.mp3 &&
 
       //send response
       res.send({
         status: true,
         message: 'File is uploaded',
         data: {
-          mimetype: recording.mimetype,
-          size: recording.size
         }
       });
     }
