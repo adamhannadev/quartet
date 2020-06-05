@@ -4,7 +4,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from "@material-ui/core/Grid";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import Button from '@material-ui/core/Button';
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import AudioPlayer from 'material-ui-audio-player';
 const audioType = 'audio/mp3';
@@ -99,35 +104,58 @@ class RecordSong extends React.Component {
         const { recording, audios } = this.state;
 
         return (
-            <div className="camera">
-                <audio
-
-
-                    style={{ width: 400 }}
-                    ref={a => {
-                        this.audio = a;
-                    }}>
-                    <p>Audio stream not available. </p>
-                </audio>
-                <div>
-                    {!recording && <button onClick={e => this.startRecording(e)}>Record</button>}
-                    {recording && <button onClick={e => this.stopRecording(e)}>Stop</button>}
-                </div>
-                <div>
-                    <h3>Recorded audios:</h3>
-                    {audios.map((audioURL, i) => (
-                        <div key={`audio_${i}`}>
-                            <audio controls style={{ width: 200 }} src={audioURL} />
-                            <div>
-                                <button onClick={() => this.deleteAudio(audioURL)}>Delete</button>
+          <Container>
+            <CssBaseline />
+            
+            <Grid container justify="center">
+              <Grid item sm={6}>
+              <Typography variant="h3">Choose Role</Typography>
+              <FormControl>
+                <Select label="" value="" onChange="">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="">Birlinn</MenuItem>
+                  <MenuItem value="">Morag</MenuItem>
+                  <MenuItem value="">Uibhist</MenuItem>
+                </Select>
+              </FormControl>
+              </Grid>
+            
+              <Grid item sm={6}>
+              <Typography variant="h3">Recording component</Typography>
+                <div className="camera">
+                    <audio
+                      style={{ width: 400 }}
+                      ref={a => {
+                          this.audio = a;
+                      }}
+                    >
+                      <p>Audio stream not available. </p>
+                    </audio>
+                    <div>
+                        {!recording && <button onClick={e => this.startRecording(e)}>Record</button>}
+                        {recording && <button onClick={e => this.stopRecording(e)}>Stop</button>}
+                    </div>
+                    <Button style={{marginTop: "2rem"}} variant="contained" color="primary">Save</Button>
+                    <div>
+                        <h3>Recorded audios:</h3>
+                        {audios.map((audioURL, i) => (
+                            <div key={`audio_${i}`}>
+                                <audio controls style={{ width: 200 }} src={audioURL} />
+                                <div>
+                                    <button onClick={() => this.deleteAudio(audioURL)}>Delete</button>
+                                </div>
+                                <div>
+                                    <button onClick={() => this.uploadAudio(audioURL)}>Upload</button>
+                                </div>
                             </div>
-                            <div>
-                                <button onClick={() => this.uploadAudio(audioURL)}>Upload</button>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+              </Grid>
+            </Grid>
+          </Container>
         );
     }
 }
