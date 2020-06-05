@@ -7,14 +7,14 @@ import './style.css'
 
 const Navbar = ({ signOut, currentUser }) => {
   return (
-    <div class="navbar">
+    <div className="navbar">
     <Grid justify="space-between" container spacing={3}>
       <Grid item>
       <img src="../quartetlogo.png" height="80" alt="Quartet Logo" />  
       </Grid>
       {currentUser ? (
-        <Grid item>
-            <Button variant="contained" color="primary" onClick={() => signOut()}>
+        <Grid item >
+            <Button style={{marginTop: "25%"}} variant="contained" color="primary" onClick={() => signOut()}>
               Sign Out
             </Button>
         </Grid>
