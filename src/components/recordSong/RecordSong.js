@@ -20,7 +20,7 @@ class RecSong extends React.Component {
       recording: false,
       audios: [],
       part: '',
-      id: props.uid
+      displayName: props.uid.replace(" ", "_")
     };
     this.updatePart = this.updatePart.bind(this);
   }
@@ -28,7 +28,7 @@ class RecSong extends React.Component {
   async componentDidMount() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     // show it to user
-    console.log(this.state.id);
+    console.log(this.state.displayName);
     this.audio.srcObject = stream;
     // this.audio.play();
     // init recording
@@ -79,12 +79,12 @@ class RecSong extends React.Component {
     this.setState({ audios });
     console.log(audios);
   }
-  uploadAudio = (audio, song, uid) => {
+  uploadAudio = (audio, song, displayName) => {
     console.log(`Blob is: - ${audio}`);
     var formData = new FormData();
     formData.append("recording", audio);
     formData.append("songID", song.id);
-    formData.append("uid", uid);
+    formData.append("uid", displayName);
     formData.append("partID", this.state.part);
     axios.post("http://localhost:8000/upload", formData, {
       headers: {
@@ -167,7 +167,7 @@ class RecSong extends React.Component {
                       <Button variant="contained" color="primary" onClick={() => this.deleteAudio(audio)}>Delete</Button>
                     </div>
                     <div>
-                      <Button variant="contained" color="primary" style={{ marginTop: "2rem" }} onClick={() => this.uploadAudio(audio.blob, song, this.state.id)}>Upload</Button>
+                      <Button variant="contained" color="primary" style={{ marginTop: "2rem" }} onClick={() => this.uploadAudio(audio.blob, song, this.state.displayName)}>Upload</Button>
                     </div>
                   </div>
                 ))}
