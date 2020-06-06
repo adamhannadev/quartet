@@ -34,7 +34,8 @@ class RecSong extends React.Component {
     this.mediaRecorder = new MediaRecorder(stream);
     // init data storage for video chunks
     this.chunks = [];
-    this.bgAudio = new Audio(`http://localhost:8000/midi/${this.props.location.state.song}.mp3`);
+    console.log(this.props.location.state.song);
+    this.bgAudio = new Audio(`http://localhost:8000/midi/${this.props.location.state.song.id}.mp3`);
     this.bgAudio.load();
     // listen for data from media recorder
     this.mediaRecorder.ondataavailable = e => {
