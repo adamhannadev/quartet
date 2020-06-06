@@ -4,10 +4,12 @@ Quartet is a web application that helps choir groups sing together while being p
 
 ## Usage
 
-**Step 1:** Create an account, or sign in with Google
+**Step 1:** Sign in with a Google account or as a guest
 
 **Step 2:** Choose a song and a role
 
 **Step 3:** Record and upload your vocals
 
-**Step 4:** Enjoy the final mixed recording when all song parts are received
+**Step 4:** Select vocal parts to be mixed
+
+**Step 5:** Enjoy your final mixed recordings
