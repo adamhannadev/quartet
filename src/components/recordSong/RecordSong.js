@@ -28,13 +28,15 @@ class RecSong extends React.Component {
   async componentDidMount() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     // show it to user
+    console.log(this.state.id);
     this.audio.srcObject = stream;
     // this.audio.play();
     // init recording
     this.mediaRecorder = new MediaRecorder(stream);
     // init data storage for video chunks
     this.chunks = [];
-    this.bgAudio = new Audio(`http://localhost:8000/midi/${this.props.location.state.song}.mp3`);
+    console.log(this.props.location.state.song);
+    this.bgAudio = new Audio(`http://localhost:8000/midi/${this.props.location.state.song.id}.mp3`);
     this.bgAudio.load();
     // listen for data from media recorder
     this.mediaRecorder.ondataavailable = e => {
@@ -58,6 +60,7 @@ class RecSong extends React.Component {
   stopRecording(e) {
     e.preventDefault();
     this.bgAudio.pause();
+    this.bgAudio.currentTime = 0;
     // stop the recorder
     this.mediaRecorder.stop();
     // say that we're not recording
@@ -80,7 +83,7 @@ class RecSong extends React.Component {
     console.log(`Blob is: - ${audio}`);
     var formData = new FormData();
     formData.append("recording", audio);
-    formData.append("songID", song);
+    formData.append("songID", song.id);
     formData.append("uid", uid);
     formData.append("partID", this.state.part);
     axios.post("http://localhost:8000/upload", formData, {

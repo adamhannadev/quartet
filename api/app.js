@@ -62,9 +62,10 @@ app.post('/upload', async (req, res) => {
       recording.mv(`./public/recordings/${req.body.songID}/${req.body.partID}/${req.body.uid}-${req.body.songID}-${req.body.partID}.wav`);
       const mixCmd = exec(`
       set - e &&
+      cd $(npm root) && cd .. &&
       cd ./public/recordings/${req.body.songID}/${req.body.partID} &&
       sox "|opusdec --force-wav ${req.body.uid}-${req.body.songID}-${req.body.partID}.wav -" ${req.body.uid}-${req.body.songID}-${req.body.partID}.mp3 && rm ${req.body.uid}-${req.body.songID}-${req.body.partID}.wav &&
-      cd ../../../../ && pwd && echo File has been transcoded.
+      cd $(npm root) && cd .. && pwd && echo File has been transcoded.
       `, (error, stdout, stderr) => {
         if (error) {
           console.log(`error: ${error.message}`);

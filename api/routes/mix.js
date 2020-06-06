@@ -40,6 +40,7 @@ router.post('/', function (req, res, next) {
     let mixedFile = `${songID}-${currentTime}-${user}.mp3`;
     const mixCmd = exec(`
     set - e &&
+    cd $(npm root) && cd .. && pwd &&
     cd ./public/recordings/tmp/ &&
     sox -m *.mp3 ${songID}-${currentTime}-${user}.mp3 &&
     DIR="../mixed/${user}"
@@ -49,7 +50,7 @@ router.post('/', function (req, res, next) {
      mkdir ../mixed/${user} && mv ${mixedFile} ../mixed/${user}
     fi
     
-    rm * && cd ../../../ && 
+    rm * && cd $(npm root) && cd .. && pwd &&
     echo ${songID} - mixed.mp3 has been created.
     `, (error, stdout, stderr) => {
         if (error) {
