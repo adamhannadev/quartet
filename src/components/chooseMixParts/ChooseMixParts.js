@@ -101,99 +101,99 @@ const ChooseMixParts = ({ location, currentUser }) => {
   return loading ? (
     <h1>Loading...</h1>
   ) : (
-    <Container>
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography variant="h3">{location.state.title}</Typography>
-      </div>
-      <Grid container spacing={3} className={classes.paddingTopBottom}>
-        <Grid item xs={3}>
-          <Typography>Soprano</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="soprano"
-              value={parts.soprano}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {soprano
-                ? soprano.map((user) => (
+      <Container>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography variant="h3">{location.state.title}</Typography>
+        </div>
+        <Grid container spacing={3} className={classes.paddingTopBottom}>
+          <Grid item xs={3}>
+            <Typography>Soprano</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="soprano"
+                value={parts.soprano}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {soprano
+                  ? soprano.map((user) => (
                     <MenuItem value={user}>{user}</MenuItem>
                   ))
-                : null}
-            </Select>
-          </FormControl>
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Tenor</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="tenor"
+                value={parts.tenor}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {tenor
+                  ? tenor.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Alto</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="alto"
+                value={parts.alto}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {alto
+                  ? alto.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Bass</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="bass"
+                value={parts.bass}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {bass
+                  ? bass.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Typography>Tenor</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="tenor"
-              value={parts.tenor}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {tenor
-                ? tenor.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography>Alto</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="alto"
-              value={parts.alto}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {alto
-                ? alto.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography>Bass</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="bass"
-              value={parts.bass}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {bass
-                ? bass.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Link to="/mix-ready">
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => mix()}
-        >
-          Mix!
+        <Link to="/mix-ready">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => mix()}
+          >
+            Mix!
         </Button>
-      </Link>
-    </Container>
-  );
+        </Link>
+      </Container>
+    );
 };
 
 const mapStateToProps = createStructuredSelector({

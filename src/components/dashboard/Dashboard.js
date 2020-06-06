@@ -119,7 +119,7 @@ export default function Dashboard(props) {
                   </Link>
                 </Grid>
               </Grid>
-              <Grid item sm={6}>
+              {/* <Grid item sm={6}>
                 <Paper className={classes.paper}>
                   <Typography variant="h3" gutterBottom>
                     Recent Recordings
@@ -155,7 +155,7 @@ export default function Dashboard(props) {
                     Update
                   </Button>
                 </form>
-              </Grid>
+              </Grid> */}
             </Grid>
           </div>
         </Container>
