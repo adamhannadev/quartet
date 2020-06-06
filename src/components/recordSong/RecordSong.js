@@ -28,7 +28,9 @@ class RecSong extends React.Component {
   async componentDidMount() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     // show it to user
+
     console.log(this.state.displayName);
+
     this.audio.srcObject = stream;
     // this.audio.play();
     // init recording
@@ -84,7 +86,9 @@ class RecSong extends React.Component {
     var formData = new FormData();
     formData.append("recording", audio);
     formData.append("songID", song.id);
+
     formData.append("uid", displayName);
+
     formData.append("partID", this.state.part);
     axios.post("http://localhost:8000/upload", formData, {
       headers: {
