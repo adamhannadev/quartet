@@ -13,3 +13,15 @@ export const getPartRecordings = (song, part) => {
     method: "get",
   });
 };
+
+export const triggerMix = (songID, mixer, recordings) => {
+  return axios({
+    url: `/mix/`,
+    method: "post",
+    data: {
+      songID,
+      mixer,
+      recordings,
+    },
+  });
+};
