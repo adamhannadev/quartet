@@ -59,6 +59,7 @@ class RecSong extends React.Component {
   stopRecording(e) {
     e.preventDefault();
     this.bgAudio.pause();
+    this.bgAudio.currentTime = 0;
     // stop the recorder
     this.mediaRecorder.stop();
     // say that we're not recording
