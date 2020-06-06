@@ -75,7 +75,7 @@ function App({ currentUser, checkUserSession }) {
                 currentUser ? <UploadMidi /> : <Redirect to="/" />
               }
             />
-            <Route path="/record-song" render={() => <RecordSong uid={currentUser.id}/>} />
+            <Route path="/record-song" render={() => <RecordSong uid={currentUser.displayName}/>} />
             <Route
               path="/clip-saved"
               render={() =>
