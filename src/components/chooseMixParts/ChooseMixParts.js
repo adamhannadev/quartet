@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,7 +13,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 
-import { getPartRecordings } from "../../utils/query";
+import { getPartRecordings, triggerMix } from "../../utils/query";
+import { selectCurrentUser } from "../../redux/user/user.selector";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChooseMixParts = ({ location }) => {
+const ChooseMixParts = ({ location, currentUser }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     soprano: null,
@@ -37,6 +41,12 @@ const ChooseMixParts = ({ location }) => {
     alto: null,
     bass: null,
     loading: true,
+  });
+  const [parts, setParts] = React.useState({
+    soprano: null,
+    tenor: null,
+    alto: null,
+    bass: null,
   });
 
   useEffect(() => {
@@ -53,8 +63,39 @@ const ChooseMixParts = ({ location }) => {
   }, [location.state.id]);
 
   const handleChange = (event) => {
-    console.log(event.target);
-    // setSong(event.target.value);
+    setParts((state) => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const mix = async () => {
+    let recordings = [
+      {
+        partID: "soprano",
+        uid: parts.soprano,
+      },
+      {
+        partID: "tenor",
+        uid: parts.tenor,
+      },
+      {
+        partID: "alto",
+        uid: parts.alto,
+      },
+      {
+        partID: "bass",
+        uid: parts.bass,
+      },
+    ];
+
+    recordings = recordings.filter((item) => item.uid !== null);
+
+    await triggerMix(
+      location.state.id,
+      currentUser.displayName.replace(" ", "_"),
+      recordings
+    );
   };
   const { soprano, tenor, alto, bass, loading } = state;
   return loading ? (
@@ -69,58 +110,85 @@ const ChooseMixParts = ({ location }) => {
         <Grid item xs={3}>
           <Typography>Soprano</Typography>
           <FormControl className={classes.formControl}>
-            <Select label="" value={soprano} onChange={handleChange}>
+            <Select
+              label=""
+              name="soprano"
+              value={parts.soprano}
+              onChange={handleChange}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Birlinn-Soprano</MenuItem>
-              <MenuItem value={20}>Morag-Soprano</MenuItem>
-              <MenuItem value={30}>Uibhist-Soprano</MenuItem>
+              {soprano
+                ? soprano.map((user) => (
+                    <MenuItem value={user}>{user}</MenuItem>
+                  ))
+                : null}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={3}>
           <Typography>Tenor</Typography>
           <FormControl className={classes.formControl}>
-            <Select label="" value={tenor} onChange={handleChange}>
+            <Select
+              label=""
+              name="tenor"
+              value={parts.tenor}
+              onChange={handleChange}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Birlinn-Tenor</MenuItem>
-              <MenuItem value={20}>Morag-Tenor</MenuItem>
-              <MenuItem value={30}>Uibhist-Tenor</MenuItem>
+              {tenor
+                ? tenor.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                : null}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={3}>
           <Typography>Alto</Typography>
           <FormControl className={classes.formControl}>
-            <Select label="" value={alto} onChange={handleChange}>
+            <Select
+              label=""
+              name="alto"
+              value={parts.alto}
+              onChange={handleChange}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Birlinn-Alto</MenuItem>
-              <MenuItem value={20}>Morag-Alto</MenuItem>
-              <MenuItem value={30}>Uibhist-Alto</MenuItem>
+              {alto
+                ? alto.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                : null}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={3}>
           <Typography>Bass</Typography>
           <FormControl className={classes.formControl}>
-            <Select label="" value={bass} onChange={handleChange}>
+            <Select
+              label=""
+              name="bass"
+              value={parts.bass}
+              onChange={handleChange}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Birlinn-Bass</MenuItem>
-              <MenuItem value={20}>Morag-Bass</MenuItem>
-              <MenuItem value={30}>Uibhist-Bass</MenuItem>
+              {bass
+                ? bass.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                : null}
             </Select>
           </FormControl>
         </Grid>
       </Grid>
       <Link to="/mix-ready">
-        <Button variant="contained" color="primary" size="large">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => mix()}
+        >
           Mix!
         </Button>
       </Link>
@@ -128,4 +196,8 @@ const ChooseMixParts = ({ location }) => {
   );
 };
 
-export default withRouter(ChooseMixParts);
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+export default withRouter(connect(mapStateToProps)(ChooseMixParts));
