@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -10,7 +10,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-
 const audioType = "audio/wav";
 
 class RecSong extends React.Component {
@@ -19,8 +18,8 @@ class RecSong extends React.Component {
     this.state = {
       recording: false,
       audios: [],
-      part: '',
-      displayName: props.uid.replace(" ", "_")
+      part: "",
+      displayName: props.uid.replace(" ", "_"),
     };
     this.updatePart = this.updatePart.bind(this);
   }
@@ -38,10 +37,10 @@ class RecSong extends React.Component {
     // init data storage for video chunks
     this.chunks = [];
     console.log(this.props.location.state.song);
-    this.bgAudio = new Audio(`http://localhost:8000/midi/${this.props.location.state.song.id}.mp3`);
+    this.bgAudio = new Audio(`/midi/${this.props.location.state.song.id}.mp3`);
     this.bgAudio.load();
     // listen for data from media recorder
-    this.mediaRecorder.ondataavailable = e => {
+    this.mediaRecorder.ondataavailable = (e) => {
       if (e.data && e.data.size > 0) {
         this.chunks.push(e.data);
       }
@@ -90,19 +89,18 @@ class RecSong extends React.Component {
     formData.append("uid", displayName);
 
     formData.append("partID", this.state.part);
-    axios.post("http://localhost:8000/upload", formData, {
+    axios.post("/upload", formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
-    this.props.history.push('/clip-saved', {
+    this.props.history.push("/clip-saved", {
       // Link to /details and pass in detailsObject as a prop, which contains item
-
-    })
-  }
+    });
+  };
   deleteAudio(audioURL) {
     // filter out current videoURL from the list of saved videos
-    const audios = this.state.audios.filter(a => a !== audioURL);
+    const audios = this.state.audios.filter((a) => a !== audioURL);
     this.setState({ audios });
   }
   updatePart(event) {
@@ -134,12 +132,14 @@ class RecSong extends React.Component {
           </Grid>
 
           <Grid item sm={6}>
-            <Typography variant="h3">Record {part.charAt(0).toUpperCase() + part.slice(1)} Part</Typography>
+            <Typography variant="h3">
+              Record {part.charAt(0).toUpperCase() + part.slice(1)} Part
+            </Typography>
             <Typography variant="h4">{song.title}</Typography>
-            <div >
+            <div>
               <audio
                 style={{ width: 400 }}
-                ref={a => {
+                ref={(a) => {
                   this.audio = a;
                 }}
               >
@@ -147,10 +147,22 @@ class RecSong extends React.Component {
               </audio>
               <div>
                 {!recording && (
-                  <Button variant="contained" color="primary" onClick={e => this.startRecording(e)}>Record</Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => this.startRecording(e)}
+                  >
+                    Record
+                  </Button>
                 )}
                 {recording && (
-                  <Button variant="contained" color="primary" onClick={e => this.stopRecording(e)}>Stop</Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => this.stopRecording(e)}
+                  >
+                    Stop
+                  </Button>
                 )}
               </div>
               {/* <Link to="/clip-saved">
@@ -168,10 +180,29 @@ class RecSong extends React.Component {
                   <div key={`audio_${i}`}>
                     <audio controls style={{ width: 200 }} src={audio.url} />
                     <div>
-                      <Button variant="contained" color="primary" onClick={() => this.deleteAudio(audio)}>Delete</Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => this.deleteAudio(audio)}
+                      >
+                        Delete
+                      </Button>
                     </div>
                     <div>
-                      <Button variant="contained" color="primary" style={{ marginTop: "2rem" }} onClick={() => this.uploadAudio(audio.blob, song, this.state.displayName)}>Upload</Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: "2rem" }}
+                        onClick={() =>
+                          this.uploadAudio(
+                            audio.blob,
+                            song,
+                            this.state.displayName
+                          )
+                        }
+                      >
+                        Upload
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -185,5 +216,3 @@ class RecSong extends React.Component {
 }
 const RecordSong = withRouter(RecSong);
 export default RecordSong;
-
-
