@@ -9,49 +9,33 @@ router.post('/', function (req, res, next) {
     let user = req.body.mixer;
     console.log(user);
     let paths = [];
+    let currentTime = Date.now();
+    let mixedFile = `${songID}-${currentTime}-${user}.mp3`;
+    // Get the routes to the source files
     for (let i = 0; i < recordings.length; i++) {
         let rec = recordings[i];
         paths.push(`public/recordings/${songID}/${rec.partID}/${rec.uid}-${songID}-${rec.partID}.mp3`);
-    }
-    console.log(paths);
-    // Send a request to /mix/{the song title from the record song page}
-    // Change directories into the uploaded song files folder
-    // Use the Sound Exchange library to mix all 4 parts into one part
-    for (let i = 0; i < paths.length; i++) {
-        let mvCmd = exec(`cp ${paths[i]} public/recordings/tmp`
-            , (error, stdout, stderr) => {
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                    return;
-                }
-                console.log(`stdout: ${stdout}`);
-            });
-        mvCmd.on('exit', function (code) {
-            console.log('Child process exited with exit code ' + code);
-        });
-    }
+    };
+    let p = paths.join(" ").replace(/,/g, ' ');
+    // Ensure that we are in the api directory
+    exec(`
+    cd $(npm root) && cd .. &&
+    echo "Move into api directory." && pwd &&
+    mkdir -pv public/recordings/tmp &&
+    echo "Make the the tmp directory." &&
 
-
-    let currentTime = Date.now();
-    let mixedFile = `${songID}-${currentTime}-${user}.mp3`;
-    const mixCmd = exec(`
-    set - e &&
-    cd $(npm root) && cd .. && pwd &&
-    cd ./public/recordings/tmp/ &&
+    echo ${p}
+    for n in ${p}
+do
+cp $n public/recordings/tmp
+done
+    cd public/recordings/tmp &&
     sox -m *.mp3 ${songID}-${currentTime}-${user}.mp3 &&
-    DIR="../mixed/${user}"
-    if [ -d "$DIR" ]; then
-     mv  ${mixedFile} ../mixed/${user}
-    else
-     mkdir ../mixed/${user} && mv ${mixedFile} ../mixed/${user}
-    fi
-    
+    echo "Mixing files into one mixed file." &&
+    mkdir -pv ../mixed/${user} && mv ${mixedFile} ../mixed/${user} &&
+    echo "Moving mixed file into ../mixed/${user}." &&
     rm * && cd $(npm root) && cd .. && pwd &&
-    echo ${songID} - mixed.mp3 has been created.
+    echo "Deleting temporary source files and moving into api directory."
     `, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -63,10 +47,8 @@ router.post('/', function (req, res, next) {
         }
         console.log(`stdout: ${stdout}`);
     });
-    mixCmd.on('exit', function (code) {
-        console.log('Child process exited with exit code ' + code);
-    });
-    res.json({ "url": `/recordings/mixed/${user}/${mixedFile}` });
+
+    res.json({ "url": `/recordings/mixed/${user}/${mixedFile}`, "uid": `${user}` });
 });
 
 module.exports = router;
