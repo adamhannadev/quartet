@@ -14,7 +14,7 @@ http://sox.sourceforge.net/
 
 https://opus-codec.org/downloads/
 
-**Step 2** Install NodeJS dependencies
+**Step 2:** Install NodeJS dependencies
 
 `cd api && yarn install`
 Installs the front end dependencies.
