@@ -16,7 +16,7 @@ export const getPartRecordings = (song, part) => {
 
 export const triggerMix = (songID, mixer, recordings) => {
   return axios({
-    url: `/mix/`,
+    url: `/mix`,
     method: "post",
     data: {
       songID,

@@ -1,4 +1,5 @@
 var express = require('express');
+let path = require('path');
 var router = express.Router();
 const { exec } = require("child_process");
 
@@ -46,11 +47,15 @@ done
             return;
         }
         console.log(`stdout: ${stdout}`);
+        req.filename = mixedFile;
+        req.user = user;
+        let path = `public/recordings/mixed/Guest/chi_mi_na_morbhenna-1591805260200-Guest.mp3`;
+        let filename = `${req.filename}`;
+        res.json({ path: path, filename: filename, user: user });
     });
 
-    res.json({ "url": `/recordings/mixed/${user}/${mixedFile}`, "uid": `${user}` });
+
+
 });
 
 module.exports = router;
-
-// api/public/midi /midi-files

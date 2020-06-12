@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChooseMixParts = ({ location, currentUser }) => {
+const ChooseMixParts = ({ location, currentUser, history }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     soprano: null,
@@ -41,6 +41,9 @@ const ChooseMixParts = ({ location, currentUser }) => {
     alto: null,
     bass: null,
     loading: true,
+    path: null,
+    filename: null,
+    mixer: null,
   });
   const [parts, setParts] = React.useState({
     soprano: null,
@@ -95,9 +98,15 @@ const ChooseMixParts = ({ location, currentUser }) => {
       location.state.id,
       currentUser.displayName.replace(" ", "_"),
       recordings
-    );
+    ).then(function (response) {
+      let path = response.data.path;
+      let filename = response.data.filename;
+      let mixer = response.data.user;
+      console.log(mixer);
+      setState((state) => ({ ...state, [path]: path, [filename]: filename, [mixer]: mixer }));
+    });
   };
-  const { soprano, tenor, alto, bass, loading } = state;
+  const { soprano, tenor, alto, bass, loading, path, filename, mixer } = state;
   return loading ? (
     <h1>Loading...</h1>
   ) : (
@@ -182,17 +191,20 @@ const ChooseMixParts = ({ location, currentUser }) => {
             </FormControl>
           </Grid>
         </Grid>
-        <Link to="/mix-ready">
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => mix()}
-          >
-            Mix!
+        {/* <Link to={{ pathname: '/mixReady', state: { path: path, filename: filename} }}> */}
+        {mixer ? mixer : null}
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => mix().then(history.push("/mix-ready", {
+            mixer,
+          }))}
+        >
+          Mix!
         </Button>
-        </Link>
-      </Container>
+        {/* </Link> */}
+      </Container >
     );
 };
 

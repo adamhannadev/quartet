@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MixReady() {
+const MixReady = ({ history }) => {
   const classes = useStyles();
 
   return (
@@ -27,7 +28,7 @@ export default function MixReady() {
       <div className={classes.paper}>
         <Typography variant="h3">Your mix is ready!</Typography>
       </div>
-
+      <h1>{props.mixer}</h1>
       <Button
         className={classes.padding}
         variant="contained"
@@ -39,3 +40,5 @@ export default function MixReady() {
     </Container>
   );
 }
+
+export default withRouter(MixReady);
