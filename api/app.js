@@ -32,6 +32,11 @@ app.use(cors())
 
 app.use('/mix', mixRouter);
 app.use('/get-recording', getRecordingRouter)
+app.get('/download', function (req, res) {
+  let filename = req.body.filename;
+  res.download(`public/recordings/mixed/Guest/${filename}`);
+});
+
 
 app.get('/midi-files', function (req, res) {
   res.json({
