@@ -63,7 +63,7 @@ const ChooseMixSong = ({ history }) => {
             value={song.id + "&&" + song.title}
             onChange={handleChange}
           >
-            <MenuItem value="">
+            <MenuItem value="null&&null">
               <em>None</em>
             </MenuItem>
             {data.map((song) => (

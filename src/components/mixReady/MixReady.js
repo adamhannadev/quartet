@@ -6,29 +6,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   padding: {
     margin: theme.spacing(8),
-    minWidth: 200
-  }
+    minWidth: 200,
+  },
 }));
 
-const MixReady = ({ history }) => {
+const MixReady = ({ location }) => {
   const classes = useStyles();
-
+  const { mixer, filename, path } = location.state;
   return (
     <Container>
       <CssBaseline />
       <div className={classes.paper}>
         <Typography variant="h3">Your mix is ready!</Typography>
       </div>
-      <h1>{props.mixer}</h1>
+      <h1>Mixer: {mixer}</h1>
+      <h1>Filename: {filename}</h1>
+      <h1>Path: {path}</h1>
+
       <Button
         className={classes.padding}
         variant="contained"
@@ -39,6 +42,6 @@ const MixReady = ({ history }) => {
       </Button>
     </Container>
   );
-}
+};
 
 export default withRouter(MixReady);
