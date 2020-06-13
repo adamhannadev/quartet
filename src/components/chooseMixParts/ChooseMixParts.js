@@ -213,7 +213,6 @@ const ChooseMixParts = ({ location, currentUser }) => {
       >
         Mix!
       </Button>
-      {/* </Link> */}
       {mixer ? (
         <Redirect
           to={{
