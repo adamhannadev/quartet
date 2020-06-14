@@ -97,6 +97,9 @@ class RecSong extends React.Component {
     this.props.history.push("/clip-saved", {
       // Link to /details and pass in detailsObject as a prop, which contains item
     });
+    var removing = browser.permissions.remove(
+      { permissions: [microphone] }
+    )
   };
   deleteAudio(audioURL) {
     // filter out current videoURL from the list of saved videos
