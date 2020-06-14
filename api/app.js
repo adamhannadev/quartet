@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 const { exec } = require("child_process");
 
 let mixRouter = require('./routes/mix');
+let downloadRouter = require('./routes/download');
 let getRecordingRouter = require('./routes/get-recording');
 
 let app = express();
@@ -27,11 +28,16 @@ app.use(express.urlencoded({
   extended: true
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors())
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../build')));
+app.use(cors());
 
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 app.use('/mix', mixRouter);
 app.use('/get-recording', getRecordingRouter)
+app.use('/download', downloadRouter);
 
 app.get('/midi-files', function (req, res) {
   res.json({
