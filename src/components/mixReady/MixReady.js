@@ -22,10 +22,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const download = (mixer, filename) => {
-  axios.get(`/download/${mixer}/${filename.split('.').slice(0, -1).join('.')}`, {
-    user: mixer,
-    filename: filename
-  });
+  // axios.get(`/download/${mixer}/${filename.split('.').slice(0, -1).join('.')}`, {
+  //   user: mixer,
+  //   filename: filename
+  // });
+  console.log(filename);
+  const url = `http://localhost:8000/public/recordings/mixed/${mixer}/${filename}`;
+  window.open(url, '_blank');
 }
 
 const MixReady = ({ location }) => {
