@@ -118,7 +118,7 @@ const ChooseMixParts = ({ location, currentUser }) => {
         let path = response.data.path;
         let filename = response.data.filename;
         let mixer = response.data.user;
-        const url = `http://localhost:8000/public/recordings/mixed/${mixer}/${filename}`;
+        const url = `public/recordings/mixed/${mixer}/${filename}`;
         window.open(url, '_blank');
         setState((state) => ({ ...state, loading: false }));
         // setState((state) => ({

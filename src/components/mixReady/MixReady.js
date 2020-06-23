@@ -27,7 +27,7 @@ const download = (mixer, filename) => {
   //   filename: filename
   // });
   console.log(filename);
-  const url = `http://localhost:8000/public/recordings/mixed/${mixer}/${filename}`;
+  const url = `public/recordings/mixed/${mixer}/${filename}`;
   window.open(url, '_blank');
 }
 
