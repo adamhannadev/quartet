@@ -45,11 +45,11 @@ app.get('/midi-files', function (req, res) {
       {
         id: "uibhist_mo_ghraidh",
         title: "Uibhist Mo Graidh",
-        route: "/midi/uibhist_mo_ghraidh.mp3"
+        route: "/public/midi/uibhist_mo_ghraidh.mp3"
       }, {
         id: "chi_mi_na_morbhenna",
         title: "Chi Mi Na Morbhenna",
-        route: "/midi/chi_mi_na_morbhenna.mp3"
+        route: "/public/midi/chi_mi_na_morbhenna.mp3"
       }
     ]
   })

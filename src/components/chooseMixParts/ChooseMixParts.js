@@ -12,8 +12,9 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import axios from "axios";
 
-import { getPartRecordings, triggerMix } from "../../utils/query";
+import { getPartRecordings } from "../../utils/query";
 import { selectCurrentUser } from "../../redux/user/user.selector";
 
 const useStyles = makeStyles((theme) => ({
@@ -91,6 +92,14 @@ const ChooseMixParts = ({ location, currentUser }) => {
         uid: parts.bass,
       },
     ];
+    const triggerMix = (songID, mixer, recordings) => {
+      setState((state) => ({ ...state, loading: true }));
+      return axios.post(`/mix`, {
+        songID,
+        mixer,
+        recordings,
+      });
+    };
 
     recordings = recordings.filter((item) => item.uid !== null);
     Promise.all([
@@ -99,22 +108,25 @@ const ChooseMixParts = ({ location, currentUser }) => {
         currentUser.displayName.replace(" ", "_"),
         recordings
       ),
+
     ])
       .then((response) => {
         response = response[0];
-
         if (!response) {
           return;
         }
         let path = response.data.path;
         let filename = response.data.filename;
         let mixer = response.data.user;
-        setState((state) => ({
-          ...state,
-          path: path,
-          filename: filename,
-          mixer: mixer,
-        }));
+        const url = `public/recordings/mixed/${mixer}/${filename}`;
+        window.open(url, '_blank');
+        setState((state) => ({ ...state, loading: false }));
+        // setState((state) => ({
+        //   ...state,
+        //   path: path,
+        //   filename: filename,
+        //   mixer: mixer,
+        // }));
       })
       .catch((err) => console.log(err));
   };
@@ -122,98 +134,98 @@ const ChooseMixParts = ({ location, currentUser }) => {
   return loading ? (
     <h1>Loading...</h1>
   ) : (
-    <Container>
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography variant="h3">{location.state.title}</Typography>
-      </div>
-      <Grid container spacing={3} className={classes.paddingTopBottom}>
-        <Grid item xs={3}>
-          <Typography>Soprano</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="soprano"
-              value={parts.soprano}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {soprano
-                ? soprano.map((user) => (
+      <Container>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography variant="h3">{location.state.title}</Typography>
+        </div>
+        <Grid container spacing={3} className={classes.paddingTopBottom}>
+          <Grid item xs={3}>
+            <Typography>Soprano</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="soprano"
+                value={parts.soprano}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {soprano
+                  ? soprano.map((user) => (
                     <MenuItem value={user}>{user}</MenuItem>
                   ))
-                : null}
-            </Select>
-          </FormControl>
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Tenor</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="tenor"
+                value={parts.tenor}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {tenor
+                  ? tenor.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Alto</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="alto"
+                value={parts.alto}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {alto
+                  ? alto.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>Bass</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                label=""
+                name="bass"
+                value={parts.bass}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {bass
+                  ? bass.map((user) => <MenuItem value={user}>{user}</MenuItem>)
+                  : null}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Typography>Tenor</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="tenor"
-              value={parts.tenor}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {tenor
-                ? tenor.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography>Alto</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="alto"
-              value={parts.alto}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {alto
-                ? alto.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography>Bass</Typography>
-          <FormControl className={classes.formControl}>
-            <Select
-              label=""
-              name="bass"
-              value={parts.bass}
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {bass
-                ? bass.map((user) => <MenuItem value={user}>{user}</MenuItem>)
-                : null}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-      {/* <Link to={{ pathname: '/mixReady', state: { path: path, filename: filename} }}> */}
-      {mixer ? mixer : null}
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        onClick={() => mix()}
-      >
-        Mix!
+        {/* <Link to={{ pathname: '/mixReady', state: { path: path, filename: filename} }}> */}
+        {/* {mixer ? mixer : null} */}
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => mix()}
+        >
+          Mix!
       </Button>
-      {mixer ? (
+        {/* {mixer ? (
         <Redirect
           to={{
             pathname: "/mix-ready",
@@ -224,9 +236,9 @@ const ChooseMixParts = ({ location, currentUser }) => {
             },
           }}
         />
-      ) : null}
-    </Container>
-  );
+      ) : null} */}
+      </Container>
+    );
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -1,10 +1,12 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import axios from "axios";
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,6 +20,16 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200,
   },
 }));
+
+const download = (mixer, filename) => {
+  // axios.get(`/download/${mixer}/${filename.split('.').slice(0, -1).join('.')}`, {
+  //   user: mixer,
+  //   filename: filename
+  // });
+  console.log(filename);
+  const url = `public/recordings/mixed/${mixer}/${filename}`;
+  window.open(url, '_blank');
+}
 
 const MixReady = ({ location }) => {
   const classes = useStyles();
@@ -37,9 +49,11 @@ const MixReady = ({ location }) => {
         variant="contained"
         color="primary"
         size="large"
+        onClick={download(mixer, filename)}
       >
         Download
       </Button>
+
     </Container>
   );
 };

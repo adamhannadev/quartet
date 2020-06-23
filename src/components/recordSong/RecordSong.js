@@ -37,7 +37,7 @@ class RecSong extends React.Component {
     // init data storage for video chunks
     this.chunks = [];
     console.log(this.props.location.state.song);
-    this.bgAudio = new Audio(`/midi/${this.props.location.state.song.id}.mp3`);
+    this.bgAudio = new Audio(`public/midi/${this.props.location.state.song.id}.mp3`);
     this.bgAudio.load();
     // listen for data from media recorder
     this.mediaRecorder.ondataavailable = (e) => {
@@ -53,7 +53,7 @@ class RecSong extends React.Component {
     // wipe old data chunks
     this.chunks = [];
     // start recorder with 10ms buffer
-    this.mediaRecorder.start(10);
+    this.mediaRecorder.start(60);
     // say that we're recording
     this.setState({ recording: true });
   }
