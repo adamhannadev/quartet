@@ -2,6 +2,9 @@
 
 Quartet is a web application that helps choir groups sing together while being physically apart. Singers record and upload vocals which are mixed with vocals from other singers to produce recordings. The recordings are then made available to all choir members to sing along to.
 
+![Quartet Main Page](https://image.prntscr.com/image/J_pGCZQSScqrI8RnllBRDw.png)
+![Quartet Record Song](https://image.prntscr.com/image/jzfOCtIuQti-32IRCRdugQ.png)
+
 ## Installation
 
 **Step 1:** Download backend dependencies
